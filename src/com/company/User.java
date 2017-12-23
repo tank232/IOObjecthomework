@@ -2,7 +2,7 @@ package com.company;
 
 import com.company.fildname.DisplayName;
 import com.company.fildname.FieldName;
-import validation.*;
+import com.company.validation.*;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

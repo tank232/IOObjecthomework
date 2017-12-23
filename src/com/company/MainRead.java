@@ -2,10 +2,10 @@ package com.company;
 
 import com.company.fildname.DisplayName;
 import com.company.fildname.FieldName;
-import validation.Length;
-import validation.NotBlank;
-import validation.Password;
-import validation.Validator;
+import com.company.validation.Length;
+import com.company.validation.NotBlank;
+import com.company.validation.Password;
+import com.company.validation.Validator;
 import java.io.*;
 import java.util.Map;
 import java.util.NoSuchElementException;

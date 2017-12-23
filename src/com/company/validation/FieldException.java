@@ -1,4 +1,4 @@
-package validation;
+package com.company.validation;
 
 import java.lang.reflect.Field;
 

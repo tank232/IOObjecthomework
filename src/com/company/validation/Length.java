@@ -1,4 +1,4 @@
-package validation;
+package com.company.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Password {
+public @interface Length {
+    int minValue() default 0;
+    int maxValue() default Integer.MAX_VALUE;
 }
