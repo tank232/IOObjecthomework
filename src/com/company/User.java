@@ -1,17 +1,33 @@
 package com.company;
 
+import com.company.fildname.DisplayName;
+import com.company.fildname.FieldName;
+import validation.*;
+
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 public class User implements Serializable{
+    @DisplayName(name="User name")
+    @NotBlank
+    @Length
     String userName;
+    @DisplayName(name="Password")
+    @Password
     String password;
+    @DisplayName(name="First name")
+    @Length(minValue = 2,maxValue = 50)
     String firstName;
+    @DisplayName(name="Second name")
+    @Length(minValue = 2,maxValue = 50)
     String secondName;
+    @DisplayName(name="Email")
+    @Email
     String email;
 
-    private static Map<String,User> Users= new HashMap<>();
+    private static Map<String,User> users = new HashMap<>();
 
     public  User(String userName, String password, String firstName, String secondName,String email) throws Exception {
         this.userName = userName;
@@ -19,13 +35,15 @@ public class User implements Serializable{
         this.firstName = firstName;
         this.secondName = secondName;
         this.email=email;
-        if (Users.get(this.userName)==null)
-        { Users.put(this.userName, this);}
-         else
+        new Validator().doValidateFields(this.getClass().getFields(),this);
+        if (users.get(this.userName) ==null)
         {
-            Exception e = new Exception();
-            throw e;
+            users.put(this.userName, this);
         }
+        else {
+            throw new RuntimeException("User allredy exists");
+        }
+
     }
 
     public String getUserName() {
@@ -50,17 +68,18 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", email='" + email + '\'' +
+        Field[] Fields = this.getClass().getDeclaredFields();
+
+        return FieldName.getFieldName(Fields[0])+ userName + '\'' +
+                FieldName.getFieldName(Fields[1])+ password + '\'' +
+                FieldName.getFieldName(Fields[2]) + firstName + '\'' +
+                FieldName.getFieldName(Fields[3])+ secondName + '\'' +
+                FieldName.getFieldName(Fields[4]) + email + '\'' +
                 '}';
     }
 
     public static Map<String, User> getUsers() {
-        return Users;
+        return users;
     }
 
     public void setUserName(String userName) {
@@ -84,6 +103,6 @@ public class User implements Serializable{
     }
 
     public static void setUsers(Map<String, User> users) {
-        Users = users;
+        User.users = users;
     }
 }

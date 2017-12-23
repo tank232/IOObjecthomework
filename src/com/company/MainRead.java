@@ -1,10 +1,23 @@
 package com.company;
 
+import com.company.fildname.DisplayName;
+import com.company.fildname.FieldName;
+import validation.Length;
+import validation.NotBlank;
+import validation.Password;
+import validation.Validator;
 import java.io.*;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class MainRead {
+    @DisplayName(name="Insert name")
+    @NotBlank
+    @Length(minValue = 2,maxValue = 50)
+    public static String name;
+    @DisplayName(name="Insert password")
+    @Password
+    public static String password;
 
     public static String FILE = "users.dat";
 
@@ -29,11 +42,16 @@ public class MainRead {
     }
 
     private static void findToFile() throws IOException {
-        System.out.println("Введите имя:");
         try (BufferedReader ois = new BufferedReader(new InputStreamReader(System.in))) {
-            String name = ois.readLine();
+            System.out.println(FieldName.getFieldName(MainRead.class.getField("name")));
+            name = ois.readLine();
+            new Validator().DoValidateField(MainRead.class.getField("name"),name);
+            System.out.println(FieldName.getFieldName(MainRead.class.getField("password")));
+            password = ois.readLine();
+            new Validator().DoValidateField(MainRead.class.getField("password"),password);
+            //   throw new RuntimeException("User allredy exists");
             try {
-                User user = User.getUsers().entrySet().stream().filter(x->x.getKey().equals(name)).findFirst().get().getValue();
+                User user = User.getUsers().entrySet().stream().filter(x->x.getKey().equals(name)&&x.getValue().password.equals(password) ).findFirst().get().getValue();
                 System.out.println(user);
             }
             catch (NoSuchElementException e)
@@ -41,6 +59,10 @@ public class MainRead {
                 System.out.println("Элемент не найден");
             }
 
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
+
+
 }
